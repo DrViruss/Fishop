@@ -82,7 +82,7 @@ public class UserViewController {
 
     @PostMapping(value = "/user/cart/add")
     public String addToCart(CartItemDTO itemDTO) { //TODO: ограничить по количеству при заказе!!!!!
-        User user = userService.getById(itemDTO.getUserid());
+        User user = userService.getByEmail(itemDTO.getUsername());
         if(user == null) return "redirect:/logout";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if(!Objects.equals(sender.getEmail(), user.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";
@@ -100,7 +100,7 @@ public class UserViewController {
 
     @PostMapping(value = "/user/cart/remove") //TODO: make useful
     public String removeFromCart(CartItemDTO itemDTO) {
-        User user = userService.getById(itemDTO.getUserid());
+        User user = userService.getByEmail(itemDTO.getUsername());
         if(user == null) return "redirect:/logout";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if(!Objects.equals(sender.getEmail(), user.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";

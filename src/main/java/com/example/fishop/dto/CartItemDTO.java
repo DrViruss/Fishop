@@ -1,12 +1,12 @@
 package com.example.fishop.dto;
 public class CartItemDTO {
     Long productid;
-    Long userid;
+    String username;
     int quantity;
 
-    public CartItemDTO(Long productid, Long userid, int quantity) {
+    public CartItemDTO(Long productid, String username, int quantity) {
         this.productid = productid;
-        this.userid = userid;
+        this.username = username;
         this.quantity = quantity;
     }
 
@@ -21,12 +21,12 @@ public class CartItemDTO {
         this.productid = productid;
     }
 
-    public Long getUserid() {
-        return userid;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getQuantity() {

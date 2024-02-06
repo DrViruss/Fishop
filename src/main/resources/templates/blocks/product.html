@@ -10,15 +10,15 @@
             <h5 class="fw-bolder" th:text="${product.name}"></h5>
             <!-- Product reviews-->
             <div class="d-flex justify-content-center small text-warning mb-2">
-                <div th:if="${product.rating >= 1 and product.rating < 1.5}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 1.5 and product.rating <= 2}" class="bi-star-half"></div>
-                <div th:if="${product.rating >= 2 and product.rating < 2.5}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 2.5 and product.rating <= 3}" class="bi-star-half"></div>
-                <div th:if="${product.rating >= 3 and product.rating < 3.5}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 3.5 and product.rating <= 4}" class="bi-star-half"></div>
-                <div th:if="${product.rating >= 4 and product.rating < 4.5}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 4.5 and product.rating <= 5}" class="bi-star-half"></div>
-                <div th:if="${product.rating >= 5 and product.rating < 5.5}" class="bi-star-fill"></div>
+                <div th:if="${product.rating >= 1}" class="bi-star-fill"></div>
+                <div th:if="${product.rating >= 1.5 and product.rating < 2}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 2}" class="bi-star-fill"></div>
+                <div th:if="${product.rating >= 2.5 and product.rating < 3}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 3}" class="bi-star-fill"></div>
+                <div th:if="${product.rating >= 3.5 and product.rating < 4}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 4}" class="bi-star-fill"></div>
+                <div th:if="${product.rating >= 4.5 and product.rating < 5}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 5}" class="bi-star-fill"></div>
             </div>
             <!-- Product price-->
             <span class="text-muted text-decoration-line-through" th:text="${product.defaultprice}"></span>
@@ -44,13 +44,13 @@
             <!-- Product reviews-->
             <div class="d-flex justify-content-center small text-warning mb-2">
                 <div th:if="${product.rating >= 1}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 1.5 and product.rating <= 2}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 1.5 and product.rating < 2}" class="bi-star-half"></div>
                 <div th:if="${product.rating >= 2}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 2.5 and product.rating <= 3}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 2.5 and product.rating < 3}" class="bi-star-half"></div>
                 <div th:if="${product.rating >= 3}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 3.5 and product.rating <= 4}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 3.5 and product.rating < 4}" class="bi-star-half"></div>
                 <div th:if="${product.rating >= 4}" class="bi-star-fill"></div>
-                <div th:if="${product.rating >= 4.5 and product.rating <= 5}" class="bi-star-half"></div>
+                <div th:if="${product.rating >= 4.5 and product.rating < 5}" class="bi-star-half"></div>
                 <div th:if="${product.rating >= 5}" class="bi-star-fill"></div>
             </div>
             <!-- Product price-->

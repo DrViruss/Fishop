@@ -20,13 +20,16 @@
                     <span th:text="'$' + ${product.price}"></span>
                 </div>
                 <p class="lead" th:text="${product.description}"></p>
-                <div class="d-flex">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
+
+                <form class="d-flex" action="/user/cart/add" method="post" sec:authorize="isAuthenticated()">
+                    <input type="hidden" name="username" th:value="${#authentication.principal.username}">
+                    <input type="hidden" name="productid" th:value="${product.id}">
+                    <input name="quantity" class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
                     <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Add to cart
                     </button>
-                </div>
+                </form>
 
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <a th:href="@{/all/} + ${product.id} + @{/edit}" class="btn btn-warning">Edit</a>

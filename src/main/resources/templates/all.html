@@ -189,8 +189,8 @@ div[slider] > input[type=range]::-ms-tooltip {
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
     <div class="input-group" style="padding-top:10px; padding-left:10%; padding-right:5%;">
-        <input type="text" name="text" th:text="${text}" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon2">
-        <input name="specie" th:text="${speciename}" list="species" placeholder="Specie" class="form-control" />
+        <input type="text" name="text" th:value="${text}" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon2">
+        <input name="speciename" th:value="${speciename}" list="species" placeholder="Specie" class="form-control" />
         <datalist id="species">
             <select>
                 <option th:each="specie: ${species}" th:value=" ${specie.name}"></option>
