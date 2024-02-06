@@ -23,22 +23,22 @@ import java.util.List;
 
 @Controller
 public class MainViewController {
-    @GetMapping("/")
-    public String home(Model model)
-    {
-        model.addAttribute("title","Home");
-        return "home";
-    }
-    @GetMapping("/about")
-    public String about()
-    {
-        return "about";
-    }
-
-    @GetMapping("/register")
-    public String reg()
-    {
-        return "register";
-    }
+//    @GetMapping("/")
+//    public String home(Model model)
+//    {
+//        model.addAttribute("title","Home");
+//        return "home";
+//    }
+//    @GetMapping("/about")
+//    public String about()
+//    {
+//        return "about";
+//    }
+//
+//    @GetMapping("/register")
+//    public String reg()
+//    {
+//        return "register";
+//    }
 
 }

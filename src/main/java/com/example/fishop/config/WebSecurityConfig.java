@@ -29,12 +29,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/","all","/register","/about","/all/*","/logout").permitAll()
+            .requestMatchers("/","all","/register","/about","/all/*","/logout","/all/search").permitAll()
             .requestMatchers("/adminpanel","/adminpanel/*","/all/*/edit","/api/*").hasAuthority("ADMIN")
 
-
             .anyRequest().authenticated()
-
         )
         .formLogin((form) -> form
             .loginPage("/login")
@@ -42,7 +40,6 @@ public class WebSecurityConfig {
             .permitAll()
         )
         .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout").permitAll().logoutSuccessUrl("/login"));
-//        http.csrf(AbstractHttpConfigurer::disable); //TODO: UNSECURE!
 
         return http.build();
     }

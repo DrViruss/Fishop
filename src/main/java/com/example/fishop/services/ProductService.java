@@ -19,11 +19,12 @@ import java.util.Optional;
 public class ProductService {
 
     private ProductRepo repo;
-    private ProductSpecieRepo specieRepo;
 
-    public ProductService(ProductRepo repo, ProductSpecieRepo specieRepo) {
+    private int maxPrice;
+
+    public ProductService(ProductRepo repo) {
         this.repo = repo;
-        this.specieRepo = specieRepo;
+        maxPrice = getDBPrice();
     }
 
     public Long isPresent(Product product){
@@ -32,14 +33,12 @@ public class ProductService {
         return product1.getId();
     }
 
-    public Product get(Long id)
-    {
+    public Product get(Long id) {
         Optional<Product> optional = repo.findById(id);
         return optional.orElse(null);
     }
 
-    public List<ResponseProductDTO> get()
-    {
+    public List<ResponseProductDTO> get() {
         List<ResponseProductDTO> result = new ArrayList<>();
         Iterable<Product> optional = repo.findAll();
         optional.forEach(product -> {
@@ -62,45 +61,39 @@ public class ProductService {
                 iterable = repo.searchByParams(search,minPrice,maxPrice);
 
             iterable.forEach(product -> result.add(new ResponseProductDTO(product)));
-
-//            Iterable<Product> iterable = repo.findByNameContaining(search);
-//
-//            if (specieId != -1)
-//                for (Product product : iterable)
-//                    if(Objects.equals(product.getSpecie().getId(), specieId))
-//                        result.add(new ResponseProductDTO(product));
-
         }
         else if(specieId != -1) {
-            repo.searchByParams(search,specieId,minPrice,maxPrice).forEach(product -> result.add(new ResponseProductDTO(product)));
-
-//            Optional<ProductSpecie> optional = specieRepo.findById(specieId);
-//            optional.ifPresent(productSpecie -> productSpecie.getProducts().forEach(product -> {
-//                    result.add(new ResponseProductDTO(product));
-//            }));
+            repo.searchByParams(specieId,minPrice,maxPrice).forEach(product -> result.add(new ResponseProductDTO(product)));
         }
         else {
             repo.searchByParams(minPrice,maxPrice).forEach(product -> result.add(new ResponseProductDTO(product)));
-
-
-//            repo.findAll().forEach(product -> {
-//                result.add(new ResponseProductDTO(product));
-//            });
         }
-//        for (ResponseProductDTO product : result)
-//            if(!(product.getPrice() > minPrice && product.getPrice() < maxPrice))
-//                result.remove(product);
-
         return result;
     }
 
-    public Product save(Product product)
+    public Product getWithHighestPrice()
     {
+        return repo.getWithHighestPrice();
+    }
+
+    public Product save(Product product) {
+        if(product.getPrice() > this.maxPrice) this.maxPrice = (int) Math.ceil(product.getPrice());
         return repo.save(product);
     }
 
-    public void remove(Long id)
-    {
-        repo.deleteById(id);
+    public void remove(Long id) {
+        Product product = get(id);
+        repo.delete(product);
+
+        if(product.getPrice() >= (this.maxPrice-1)) this.maxPrice = getDBPrice();
+
+    }
+
+    private int getDBPrice() {
+        return (int) Math.ceil(repo.getWithHighestPrice().getPrice());
+    }
+
+    public int getMaxPrice() {
+        return this.maxPrice;
     }
 }

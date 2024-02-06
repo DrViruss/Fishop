@@ -98,7 +98,7 @@ public class UserViewController {
         return "redirect:/all/"+itemDTO.getProductid();
     }
 
-    @PostMapping(value = "/user/cart/remove")
+    @PostMapping(value = "/user/cart/remove") //TODO: make useful
     public String removeFromCart(CartItemDTO itemDTO) {
         User user = userService.getById(itemDTO.getUserid());
         if(user == null) return "redirect:/logout";
@@ -121,7 +121,7 @@ public class UserViewController {
 //    public String makeOrder(@RequestParam(defaultValue = "0") Long userid, Model model) {
 //        Order order = orderService.get(userid);
 //        model.addAttribute("order",order);
-//        //TODO: переход на страницу оплаты
+//        //TODO: open payment page ???
 //        return "order";
 //    }
 //
@@ -134,7 +134,7 @@ public class UserViewController {
 //
 //
 //        if(user == null) return "redirect:/logout";
-//        //TODO: создаем пустую
+//        //TODO: empty order creation  ???
 //        return "redirect:/all/";
 //    }
 //
@@ -147,7 +147,7 @@ public class UserViewController {
 //
 ////        Order order = new Order(user,user.getCart());
 //        if(user == null) return "redirect:/logout";
-//        //TODO: оплачиваем
+//        //TODO: payment  ???
 //        return "redirect:/all/";
 //    }
 }

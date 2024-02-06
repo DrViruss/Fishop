@@ -25,19 +25,32 @@ public class ProductViewController {
     ProductSpecieService specieService;
 
     @GetMapping("/all")
-    public String all(Model model)
-    {
+    public String all(Model model) {
         List<ResponseProductDTO> products = productService.get();
 
-        model.addAttribute("price",99999); //TODO: ask in db max price
+        model.addAttribute("text","");
+        model.addAttribute("speciename","");
+        model.addAttribute("sliderprice_minimum",0);
+        model.addAttribute("sliderprice_value",productService.getMaxPrice());
+
+        model.addAttribute("sliderprice_maximum",productService.getMaxPrice());
         model.addAttribute("products",products);
         model.addAttribute("species",specieService.get());
         return "all";
     }
 
     @PostMapping(value = "/all/search")
-    public String search(@RequestParam(defaultValue = "") String text,@RequestParam(defaultValue = "-1") Long specieid,@RequestParam(defaultValue = "0") int minPrice,@RequestParam int maxPrice, Model model) {
-        model.addAttribute("price",99999); //TODO: ask in db max price
+    public String search(@RequestParam(defaultValue = "") String text,@RequestParam(defaultValue = "") String speciename,@RequestParam(defaultValue = "0") int minPrice,@RequestParam int maxPrice, Model model) {
+        ProductSpecie specie = specieService.getByName(speciename);
+        Long specieid = -1L;
+        if(specie!= null) specieid = specie.getId();
+
+        model.addAttribute("text",text);
+        model.addAttribute("speciename",speciename);
+        model.addAttribute("sliderprice_minimum",minPrice);
+        model.addAttribute("sliderprice_value",maxPrice);
+
+        model.addAttribute("sliderprice_maximum",productService.getMaxPrice());
         model.addAttribute("products",productService.search(text,specieid,minPrice,maxPrice));
         model.addAttribute("species",specieService.get());
         return "all";
@@ -84,7 +97,6 @@ public class ProductViewController {
 
         return redirectToProduct(product.getId());
     }
-//TODO: удаление из карзины
     @PostMapping(value="/api/all/addProduct", consumes = {"application/x-www-form-urlencoded"})
     public String addProduct(ProductDTO productDTO) {
         ProductSpecie specie = specieService.getByName(productDTO.getSpecie());
