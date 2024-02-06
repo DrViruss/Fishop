@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<style>
+    .form-signin {
+      max-width: 330px;
+      padding: 1rem;
+    }
+
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+</style>
+
+
+<div class="d-flex align-items-center py-4 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto">
+        <div class="bd-callout bd-callout-warning small" th:if="${param.error}">Something goes wrong.</div>
+            <form th:action="@{/api/user/add}" method="post">
+                <h1 class="h3 mb-3 fw-normal">Please register</h1>
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="floatingEmailInput" name="email" placeholder="name@example.com">
+                    <label for="floatingEmailInput">Email address</label>
+                </div><br>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingUsernameInput" name="username" placeholder="superuser">
+                    <label for="floatingUsernameInput">Username</label>
+                </div><br>
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="floatingZipInput" name="zip" placeholder="1423">
+                    <label for="floatingZipInput">Zip</label>
+                </div><br>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingCountryInput" name="country" placeholder="France">
+                    <label for="floatingCountryInput">Country</label>
+                </div><br>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingStateInput" name="state" placeholder="Odessa">
+                    <label for="floatingStateInput">State</label>
+                </div><br>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+        </form>
+    </main>
+</div>
+
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
+
+
+
+
+<!--<main class="form-signin w-100 m-auto">-->
+<!--    <div class="bd-callout bd-callout-warning small" th:if="${param.error}">-->
+<!--        Something goes wrong.-->
+<!--    </div>-->
+<!--    <form th:action="@{/register}" method="post">-->
+<!--        <h1 class="h3 mb-3 fw-normal">Please register</h1>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="email" class="form-control" id="floatingEmailInput" name="email" placeholder="name@example.com">-->
+<!--            <label for="floatingEmailInput">Email address</label>-->
+<!--        </div><br>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="text" class="form-control" id="floatingUsernameInput" name="name" placeholder="superuser">-->
+<!--            <label for="floatingUsernameInput">Username</label>-->
+<!--        </div><br>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="number" class="form-control" id="floatingZipInput" name="zip" placeholder="1423">-->
+<!--            <label for="floatingZipInput">Zip</label>-->
+<!--        </div><br>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="text" class="form-control" id="floatingCountryInput" name="country" placeholder="France">-->
+<!--            <label for="floatingCountryInput">Country</label>-->
+<!--        </div><br>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="text" class="form-control" id="floatingStateInput" name="state" placeholder="Odessa">-->
+<!--            <label for="floatingStateInput">State</label>-->
+<!--        </div><br>-->
+<!--        <div class="form-floating">-->
+<!--            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">-->
+<!--            <label for="floatingPassword">Password</label>-->
+<!--        </div>-->
+<!--        <button class="btn btn-primary w-100 py-2" type="submit">Register</button>-->
+<!--    </form>-->
+<!--</main>-->

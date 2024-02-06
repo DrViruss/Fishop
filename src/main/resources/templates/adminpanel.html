@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" xmlns:dt="http://www.thymeleaf.org/dandelion/datatables">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <title>About us</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script language="javascript" type="text/javascript">
+            $(document).ready( function () {
+                $('#orders').DataTable();
+                $('#users').DataTable();
+                $('#products').DataTable();
+            } );
+        </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container-fluid">
+    <nav id="sidebar" th:insert="blocks/adminsidebar :: adminsidebar" class="row flex-nowrap" style="width: 15%;float: left;"></nav>
+    <div id="content" class="col py-3" style="width:85%;float:right;">
+        <div class="col">
+            <h3>Admin panel</h3>
+            <a type="button" class="btn btn-success" href="/adminpanel/products/new">Add</a>
+        </div>
+
+        <div class="lead" th:if="${isOrders}">
+            <p class="lead">
+            <table class="table table-hover" id="orders">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order :${orders}">
+                        <td th:text="${order.id}"></td>
+                        <td th:text="${order.customer}"></td>
+                        <td th:text="${order.status}"></td>
+                        <td><a type="button" class="btn btn-info" th:href="@{/order/}+${order.id}">Details</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="lead" th:if="${isUsers}">
+            <p class="lead">
+            <table class="table table-hover" id="users">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user :${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td> <a type="button" class="btn btn-info" th:href="@{/user/}+${user.email}">Details</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="lead" th:if="${isProducts}">
+            <p class="lead">
+            <table class="table table-hover" id="products">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Specie</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product :${products}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.specie}"></td>
+                    <td><a type="button" class="btn btn-info" th:href="@{/all/}+${product.id}">Details</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<footer style="clear: both;" th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
