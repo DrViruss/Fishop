@@ -22,7 +22,7 @@ public class Order {
 
     @Embedded
     @ElementCollection(targetClass = CartItem.class)
-    private List<CartItem> items;
+    private List<CartItem> items; //TODO: fix: on product changes (id,price, etc) will cause order problems
 
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;

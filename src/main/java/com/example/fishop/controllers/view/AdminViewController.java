@@ -42,7 +42,7 @@ public class AdminViewController {
         });
         model.addAttribute("isOrders",true);
         model.addAttribute("orders",orders);
-        return "adminpanel";
+        return "admin/adminpanel";
     }
 
 
@@ -50,7 +50,7 @@ public class AdminViewController {
     public String addProduct(Model model)
     {
         model.addAttribute("species",specieService.get());
-        return "newproduct";
+        return "admin/newproduct";
     }
 
     @GetMapping("/adminpanel/users")
@@ -64,7 +64,7 @@ public class AdminViewController {
         });
         model.addAttribute("isUsers",true);
         model.addAttribute("users",users);
-        return "adminpanel";
+        return "admin/adminpanel";
     }
     @GetMapping("/adminpanel/products")
     public String products(Model model)
@@ -72,6 +72,6 @@ public class AdminViewController {
         List<ResponseProductDTO> products = productService.get();
         model.addAttribute("isProducts",true);
         model.addAttribute("products",products);
-        return "adminpanel";
+        return "admin/adminpanel";
     }
 }

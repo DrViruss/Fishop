@@ -67,7 +67,7 @@ public class ProductViewController {
     public String productEdit(@PathVariable Long productId, Model model) {
         model.addAttribute("species",specieService.get());
         model.addAttribute("product",new ResponseProductDTO(productService.get(productId)));
-        return "product-edit";
+        return "admin/product-edit";
     }
 
     @PostMapping(value = "/api/all/remove")

@@ -2,6 +2,8 @@ package com.example.fishop.controllers.view;
 
 import com.example.fishop.dto.CartItemDTO;
 import com.example.fishop.dto.UserDTO;
+//import com.example.fishop.dto.response.*;
+import com.example.fishop.dto.response.ResponseItemDTO;
 import com.example.fishop.dto.response.ResponseUserDTO;
 import com.example.fishop.entity.Product;
 import com.example.fishop.entity.User;
@@ -12,13 +14,15 @@ import com.example.fishop.services.OrderService;
 import com.example.fishop.services.ProductService;
 import com.example.fishop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -39,7 +43,7 @@ public class UserViewController {
         User user = userService.getByEmail(userDTO.getEmail());
         if(user == null) return "redirect:/error";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!Objects.equals(sender.getEmail(), userDTO.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";
+        if(!Objects.equals(sender.getEmail(), userDTO.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
 
         user.setUsername(userDTO.getUsername());
         if(!userDTO.getPassword().isBlank()) user.setPassword(userDTO.getPassword());
@@ -47,7 +51,7 @@ public class UserViewController {
         user.setZip(userDTO.getZip());
         user.setCountry(userDTO.getCountry());
         user.setState(userDTO.getState());
-
+//TODO: validation
         user = userService.save(user);
         return "redirect:/user/"+user.getEmail();
     }
@@ -64,7 +68,7 @@ public class UserViewController {
         user.setCountry(userDTO.getCountry());
         user.setState(userDTO.getState());
         user.defaultCart();
-
+//TODO: validation
         userService.save(user);
         return "redirect:/login";
     }
@@ -73,11 +77,11 @@ public class UserViewController {
     public String user(@PathVariable String username, Model model) {
         User usr = userService.getByEmail(username);
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!Objects.equals(sender.getEmail(), usr.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";
+        if(!Objects.equals(sender.getEmail(), usr.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
 
         ResponseUserDTO response = new ResponseUserDTO(usr);
         model.addAttribute("user",response);
-        return "user";
+        return "user/profile";
     }
 
     @PostMapping(value = "/user/cart/add")
@@ -85,7 +89,7 @@ public class UserViewController {
         User user = userService.getByEmail(itemDTO.getUsername());
         if(user == null) return "redirect:/logout";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!Objects.equals(sender.getEmail(), user.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";
+        if(!Objects.equals(sender.getEmail(), user.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
 
         Product product = productService.get(itemDTO.getProductid());
         if(product == null) return "redirect:/all";
@@ -98,12 +102,34 @@ public class UserViewController {
         return "redirect:/all/"+itemDTO.getProductid();
     }
 
+    @GetMapping(value = "/user/cart")
+    public String cart(@RequestParam(name = "user") String email,Model model) {
+        User user = userService.getByEmail(email);
+        if(user == null) return "redirect:/logout";
+        User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(!Objects.equals(sender.getEmail(), user.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
+
+
+//        model.addAttribute("cart",new ResponseCartDTO(user.getCart()));
+        model.addAttribute("username",user.getEmail());
+
+//        Product product = productService.get(itemDTO.getProductid());
+//        if(product == null) return "redirect:/all";
+//
+//        Cart cart = user.getCart();
+//        cart.addItem(new CartItem(product,itemDTO.getQuantity()));
+//        cart.UpdatePrice();
+//        userService.save(user);
+
+        return "user/cart";
+    }
+
     @PostMapping(value = "/user/cart/remove") //TODO: make useful
     public String removeFromCart(CartItemDTO itemDTO) {
         User user = userService.getByEmail(itemDTO.getUsername());
         if(user == null) return "redirect:/logout";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!Objects.equals(sender.getEmail(), user.getEmail()) || sender.getRole() == UserRoleEnum.ADMIN) return "redirect:/";
+        if(!Objects.equals(sender.getEmail(), user.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
 
         Product product = productService.get(itemDTO.getProductid());
         if(product == null) return "redirect:/all";
@@ -115,6 +141,20 @@ public class UserViewController {
 
         return "redirect:/all/"+itemDTO.getProductid();
     }
+
+
+    @PostMapping(value = "/api/user/getCartItems")
+    public ResponseEntity<List<ResponseItemDTO>> cart(@RequestBody List<Long> items) {
+        List<ResponseItemDTO> result = new ArrayList<>();
+        for(Long id : items)
+        {
+            Product product = productService.get(id);
+            if(product != null)
+                result.add(new ResponseItemDTO(product));
+        }
+        return new ResponseEntity<>(result, HttpStatusCode.valueOf(200));
+    }
+
 
 //    @PreAuthorize("#userid == authentication.principal.id")
 //    @GetMapping(value = "/user/cart/make")

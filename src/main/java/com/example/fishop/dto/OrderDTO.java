@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class OrderDTO {
 
 //    private Long customerid;

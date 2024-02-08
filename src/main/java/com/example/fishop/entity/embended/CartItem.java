@@ -3,6 +3,7 @@ package com.example.fishop.entity.embended;
 import com.example.fishop.entity.Product;
 import jakarta.persistence.*;
 
+@Deprecated
 @Embeddable
 public class CartItem {
 

@@ -1,4 +1,6 @@
 package com.example.fishop.dto;
+
+@Deprecated
 public class CartItemDTO {
     Long productid;
     String username;
