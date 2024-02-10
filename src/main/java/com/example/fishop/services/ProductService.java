@@ -1,18 +1,12 @@
 package com.example.fishop.services;
 
-import com.example.fishop.dto.ProductDTO;
 import com.example.fishop.dto.response.ResponseProductDTO;
 import com.example.fishop.entity.Product;
-import com.example.fishop.entity.ProductSpecie;
 import com.example.fishop.repo.ProductRepo;
-import com.example.fishop.repo.ProductSpecieRepo;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,7 +18,8 @@ public class ProductService {
 
     public ProductService(ProductRepo repo) {
         this.repo = repo;
-        maxPrice = getDBPrice();
+        if(repo.count() > 0)
+            maxPrice = getDBPrice();
     }
 
     public Long isPresent(Product product){

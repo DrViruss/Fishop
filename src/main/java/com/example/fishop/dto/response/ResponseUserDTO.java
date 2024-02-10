@@ -6,7 +6,7 @@ public class ResponseUserDTO {
 
     private Long id;
     private String username;
-    private int zip;
+    private String zip;
     private String country;
     private String state;
     private String email;
@@ -31,11 +31,11 @@ public class ResponseUserDTO {
         this.username = username;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 

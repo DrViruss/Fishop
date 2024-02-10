@@ -24,7 +24,6 @@
     <div id="content" class="col py-3" style="width:85%;float:right;">
         <div class="col">
             <h3>Admin panel</h3>
-            <a type="button" class="btn btn-success" href="/adminpanel/products/new">Add</a>
         </div>
 
         <div class="lead" th:if="${isOrders}">
@@ -41,9 +40,9 @@
                 <tbody>
                     <tr th:each="order :${orders}">
                         <td th:text="${order.id}"></td>
-                        <td th:text="${order.customer}"></td>
+                        <td th:text="${order.customer.username}"></td>
                         <td th:text="${order.status}"></td>
-                        <td><a type="button" class="btn btn-info" th:href="@{/order/}+${order.id}">Details</a></td>
+                        <td><a type="button" class="btn btn-info" th:href="@{/user/order?id=}+${order.id}">Details</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -74,6 +73,9 @@
 
 
         <div class="lead" th:if="${isProducts}">
+            <div class="col">
+                <a type="button" class="btn btn-success" href="/adminpanel/products/new">Add</a>
+            </div>
             <p class="lead">
             <table class="table table-hover" id="products">
                 <thead>

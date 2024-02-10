@@ -1,4 +1,4 @@
-package com.example.fishop.controllers.view;
+package com.example.fishop.controller;
 
 import com.example.fishop.dto.response.ResponseOrderDTO;
 import com.example.fishop.dto.response.ResponseProductDTO;

@@ -1,4 +1,4 @@
-package com.example.fishop.controllers.view;
+package com.example.fishop.controller;
 
 import com.example.fishop.dto.ProductDTO;
 import com.example.fishop.dto.response.ResponseProductDTO;
@@ -7,6 +7,9 @@ import com.example.fishop.entity.Product;
 import com.example.fishop.entity.ProductSpecie;
 import com.example.fishop.services.ProductService;
 import com.example.fishop.services.ProductSpecieService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +43,12 @@ public class ProductViewController {
     }
 
     @PostMapping(value = "/all/search")
-    public String search(@RequestParam(defaultValue = "") String text,@RequestParam(defaultValue = "") String speciename,@RequestParam(defaultValue = "0") int minPrice,@RequestParam int maxPrice, Model model) {
+    public String search(
+            @Valid @Size(max = 120) @RequestParam(defaultValue = "") String text,
+            @Valid @Size(max = 20) @RequestParam(defaultValue = "") String speciename,
+            @Valid @Min(0) @RequestParam(defaultValue = "0") int minPrice,
+            @Valid @Min(0) @RequestParam int maxPrice, Model model)
+    {
         ProductSpecie specie = specieService.getByName(speciename);
         Long specieid = -1L;
         if(specie!= null) specieid = specie.getId();

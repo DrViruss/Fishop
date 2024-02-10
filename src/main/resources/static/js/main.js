@@ -114,8 +114,13 @@ function Increment(el,prodid)
     el.stepUp();
 
     var cart_items = window.localStorage.getItem("cart_items");
+
+
     cart_items = cart_items.split('},');
     var arrayLength = cart_items.length;
+
+
+
     var idx = -1;
     for (var i = 0; i < arrayLength; i++) {
         if(i+1 != arrayLength)
@@ -150,6 +155,7 @@ function Decrement(el,prodid)
 
 
     var cart_items = window.localStorage.getItem("cart_items");
+
     cart_items = cart_items.split('},');
     var arrayLength = cart_items.length;
     var idx = -1;
@@ -169,24 +175,8 @@ function Decrement(el,prodid)
     cart_items.splice(idx, 1);
     item.quantity = el.value;
 
-    if(item.quantity > 0)
-    {
         cart_items.push(JSON.stringify(item));
         window.localStorage.setItem("cart_items",cart_items)
-    }
-    else
-    {
-        if(cart_items.length == 0)
-        {
-            window.localStorage.removeItem("cart_items");
-        }
-        else
-        {
-            window.localStorage.setItem("cart_items",cart_items)
-        }
-    }
-
-
 
     el.parentNode.parentNode.children[3].children[1].textContent='x'+el.value;
 }

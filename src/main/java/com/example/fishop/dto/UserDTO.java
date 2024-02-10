@@ -1,17 +1,28 @@
 package com.example.fishop.dto;
 
+import jakarta.validation.constraints.*;
+
 public class UserDTO {
+    @Email
+    private String email;
+    @NotBlank
+    @Size(min = 6,max = 12)
     private String username;
     private String password;
-    private String email;
-    private int zip;
+    @NotBlank
+    private String zip;
+    private String country;
     private String location;
+    private String state;
 
-    public UserDTO(String username, String password, String email, int zip) {
+    public UserDTO(String email, String username, String password, String zip, String country, String location, String state) {
+        this.email = email;
         this.username = username;
         this.password = password;
-        this.email = email;
         this.zip = zip;
+        this.country = country;
+        this.location = location;
+        this.state = state;
     }
 
     public UserDTO() {
@@ -41,29 +52,55 @@ public class UserDTO {
         this.email = email;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
-    public String getLocation() {
+    public String getLocation()
+    {
+        if(location == null)
+        {
+            String c = country.substring(0, 1).toUpperCase() + country.substring(1);
+            String s = state.substring(0, 1).toUpperCase() + state.substring(1);
+            return c+", "+s;
+        }
         return location;
+    }
+
+    public String getCountry() {
+        if(country == null)
+        {
+            String[] loc = this.location.split(",");
+            loc[0] = loc[0].trim();
+            return loc[0].substring(0, 1).toUpperCase() + loc[0].substring(1);
+        }
+        return country;
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public String getCountry() {
-        String[] loc = location.split(",");
-        return loc[0].isBlank()? "UNKNOWN_COUNTRY" : loc[0].trim();
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getState() {
-        String[] loc = location.split(",");
-        return loc[1].isBlank()? "UNKNOWN_STATE" : loc[1].trim();
+        if(state == null)
+        {
+            String[] loc = this.location.split(",");
+            loc[1] = loc[1].trim();
+            return loc[1].substring(0, 1).toUpperCase() + loc[1].substring(1);
+        }
+        return state;
     }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 }

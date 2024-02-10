@@ -1,10 +1,9 @@
 package com.example.fishop.entity;
 
-import com.example.fishop.entity.embended.Cart;
-import com.example.fishop.entity.embended.CartItem;
 import com.example.fishop.enums.UserRoleEnum;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +14,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    private int zip;
+    private String zip;
     private String country;
     private String state;
     @Column(unique=true)
@@ -26,9 +25,6 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     @ElementCollection(targetClass = Order.class)
     private List<Order> orders;
-
-    @Embedded
-    private Cart cart;
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -68,11 +64,11 @@ public class User {
         this.password = password;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
@@ -116,49 +112,10 @@ public class User {
         this.orders = orders;
     }
 
-    public Cart getCart() {
-        return cart;
+    public void addOrder(Order order)
+    {
+        if(orders == null) this.orders = new ArrayList<>();
+        this.orders.add(order);
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public void defaultCart(){this.cart = new Cart(null,0);}
 }
-
-//@Embeddable
-//class Cart {
-//    @Embedded
-//    @ElementCollection(targetClass = CartItem.class)
-//    private List<CartItem> items;
-//    private float price;
-//
-//    public Cart(List<CartItem> items, float price) {
-//        this.items = items;
-//        this.price = price;
-//    }
-//
-//    public Cart() {
-//        price = 0;
-//    }
-//
-//    public List<CartItem> getItems() {
-//        return items;
-//    }
-//
-//    public void setItems(List<CartItem> items) {
-//        this.items = items;
-//    }
-//
-//    public float getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(float price) {
-//        this.price = price;
-//    }
-//}
-
-
-

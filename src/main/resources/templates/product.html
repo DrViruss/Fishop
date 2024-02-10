@@ -20,18 +20,12 @@
                     <span th:text="'$' + ${product.price}"></span>
                 </div>
                 <p class="lead" th:text="${product.description}"></p>
+                    <input sec:authorize="isAuthenticated()" name="quantity" class="form-control text-center me-3" id="inputQuantity" type="number" value="1" step="1" style="max-width: 3rem" th:if="${product.isInStock}" />
 
-<!--                <form class="d-flex" action="/user/cart/add" method="post" sec:authorize="isAuthenticated()">-->
-<!--                    <input type="hidden" name="username" th:value="${#authentication.principal.username}">-->
-<!--                    <input type="hidden" name="productid" th:value="${product.id}">-->
-                    <input sec:authorize="isAuthenticated()" name="quantity" class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" th:if="${!isInStock}" />
-
-                    <button sec:authorize="isAuthenticated()" class="btn btn-outline-dark flex-shrink-0" th:attr="onclick=|addToCart('${product.id}','${#authentication.principal.username}',this)|" th:if="${!isInStock}"> <!-- onclick="addToCart()" -->
+                    <button sec:authorize="isAuthenticated()" class="btn btn-outline-dark flex-shrink-0" th:attr="onclick=|addToCart('${product.id}','${#authentication.principal.username}',this)|" th:if="${product.isInStock}"> <!-- onclick="addToCart()" -->
                         <i class="bi-cart-fill me-1"></i>
                         Add to cart
                     </button>
-<!--                </form>-->
-
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <a th:href="@{/all/} + ${product.id} + @{/edit}" class="btn btn-warning">Edit</a>
                     <form  action="/api/all/remove" method="post">

@@ -1,12 +1,10 @@
 package com.example.fishop.entity;
 
-import com.example.fishop.entity.embended.Cart;
-import com.example.fishop.entity.embended.CartItem;
+import com.example.fishop.entity.embended.OrderedProduct;
 import com.example.fishop.enums.OrderStatusEnum;
-import com.example.fishop.utils.DateUtils;
+import com.example.fishop.utils.DBUtils;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,8 +19,8 @@ public class Order {
     private User customer;
 
     @Embedded
-    @ElementCollection(targetClass = CartItem.class)
-    private List<CartItem> items; //TODO: fix: on product changes (id,price, etc) will cause order problems
+    @ElementCollection(targetClass = OrderedProduct.class)
+    private List<OrderedProduct> items;
 
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
@@ -30,19 +28,36 @@ public class Order {
     private String date;
     private float price;
     private float amount;
+    private String paymentIntent;
+    private String paymentIntentClientSecret;
 
 
-    public Order(User customer, Cart cart) {
+    public Order(User customer,List<OrderedProduct> products) {
         this.customer = customer;
-        this.items = cart.getItems();
+        this.items = products;
         this.status = OrderStatusEnum.AWAITING_PAYMENT;
-        this.date = DateUtils.getCurrentDateTime();
+        this.date = DBUtils.getCurrentDateTime();
         InitItemsData();
     }
 
     public Order() {
     }
 
+    public String getPaymentIntent() {
+        return paymentIntent;
+    }
+
+    public void setPaymentIntent(String paymentIntent) {
+        this.paymentIntent = paymentIntent;
+    }
+
+    public String getPaymentIntentClientSecret() {
+        return paymentIntentClientSecret;
+    }
+
+    public void setPaymentIntentClientSecret(String paymentIntentClientSecret) {
+        this.paymentIntentClientSecret = paymentIntentClientSecret;
+    }
 
     public Long getId() {
         return id;
@@ -52,11 +67,11 @@ public class Order {
         this.id = id;
     }
 
-    public List<CartItem> getItems() {
+    public List<OrderedProduct> getItems() {
         return items;
     }
 
-    public void setItems(List<CartItem> items) {
+    public void setItems(List<OrderedProduct> items) {
         this.items = items;
     }
 
@@ -104,11 +119,10 @@ public class Order {
     {
         this.amount = 0;
         this.price = 0;
-        for(CartItem item : items)
+        for(OrderedProduct item : items)
         {
-            price += item.getPrice();
+            price += (float) (item.getPrice() * item.getQuantity());
             amount += item.getQuantity();
         }
     }
-
 }

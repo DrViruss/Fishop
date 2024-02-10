@@ -29,8 +29,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/","all","/register","/about","/all/*","/logout","/all/search","/404").permitAll()
-            .requestMatchers("/adminpanel","/adminpanel/*","/all/*/edit","/api/*").hasAuthority("ADMIN")
+            .requestMatchers("/","all","/register","/about","/all/*","/logout","/all/search","/404","/api/user/add").permitAll()
+            .requestMatchers("/adminpanel","/adminpanel/*","/all/*/edit").hasAuthority("ADMIN")
 
             .anyRequest().authenticated()
         )

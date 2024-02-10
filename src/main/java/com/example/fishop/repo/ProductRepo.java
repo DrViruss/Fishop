@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ProductRepo extends CrudRepository<Product,Long> {
-    public Iterable<Product> findByNameContaining(String name);
     public Iterable<Product> findBySpecieId(Long specieId);
 
     @Query("SELECT p FROM Product p WHERE p.name LIKE %?1% AND p.specie.id = ?2 AND p.price >= ?3 AND p.price <= ?4")

@@ -17,7 +17,7 @@
                     </div>
 
                     <form th:action="@{/logout}" method="post" class="text-end" sec:authorize="isAuthenticated()">
-                        <a href="#" th:href="@{/user/} + ${#authentication.principal.username}"  type="button" class="btn btn-success" >Profile</a>
+                        <a href="/user"  type="button" class="btn btn-success" >Profile</a>
                         <a href="/adminpanel" sec:authorize="hasAuthority('ADMIN')" type="button" class="btn btn-warning">Admin</a>
                         <input type="submit" class="btn btn-danger" value="Sign Out"/>
                     </form>

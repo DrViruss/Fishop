@@ -2,10 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <title>Login</title>
+    <title>Register</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function validateRegistration(event)
+{
+
+    if (!(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/.test($("#floatingEmailInput")[0].value)))
+    {
+        event.preventDefault();
+        alert("You have entered an invalid email!")
+        return false;
+    }
+
+
+    if (!(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,16}$/.test($("#floatingPassword")[0].value)))
+    {
+        event.preventDefault();
+        alert("Password must contain 8-16 characters A-z and number 0-9")
+        return false;
+    }
+
+    if (!(/^[A-Za-z]\w{5,29}$/.test($("#floatingUsernameInput")[0].value)))
+    {
+        event.preventDefault();
+        alert("You have entered an invalid username!")
+        return false;
+    }
+
+
+    if (!(/^[0-9]{5}(?:-[0-9]{4})$/.test($("#floatingZipInput")[0].value)))
+    {
+        event.preventDefault();
+        alert("Zip not valid. Example: 12345-1234")
+        return false;
+    }
+
+
+    var loc = $("#floatingCountryInput").value+','+$("#floatingStateInput")[0].value;
+    if (!(/^[a-zA-Z ]{2,56},[ a-zA-Z]{4,}$/.test(loc)))
+    {
+        event.preventDefault();
+        alert("You have entered an invalid location!")
+        return false;
+    }
+    return true;
+
+}
+</script>
 <body>
 <header th:insert="blocks/header :: header"></header>
 <style>
@@ -33,7 +80,12 @@
 
 <div class="d-flex align-items-center py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-        <div class="bd-callout bd-callout-warning small" th:if="${param.error}">Something goes wrong.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.emailexist}">Email already in use.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.emailNotValid}">Email not valid.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.usernameNotValid}">Username not valid.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.zipNotValid}">Zip not valid.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.locationNotValid}">Location not valid.</div>
+        <div class="bd-callout bd-callout-warning small" th:if="${param.passwordNotValid}">Password not valid.</div>
             <form th:action="@{/api/user/add}" method="post">
                 <h1 class="h3 mb-3 fw-normal">Please register</h1>
                 <div class="form-floating">
@@ -45,7 +97,7 @@
                     <label for="floatingUsernameInput">Username</label>
                 </div><br>
                 <div class="form-floating">
-                    <input type="number" class="form-control" id="floatingZipInput" name="zip" placeholder="1423">
+                    <input type="text" class="form-control" id="floatingZipInput" name="zip" placeholder="1423">
                     <label for="floatingZipInput">Zip</label>
                 </div><br>
                 <div class="form-floating">
@@ -60,7 +112,7 @@
                     <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
                     <label for="floatingPassword">Password</label>
                 </div>
-                <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+                <button class="btn btn-primary w-100 py-2" onclick="validateRegistration(event)" type="submit">Register</button>
         </form>
     </main>
 </div>

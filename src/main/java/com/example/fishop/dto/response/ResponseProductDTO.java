@@ -26,7 +26,7 @@ public class ResponseProductDTO {
         this.price = product.getPrice();
         this.defaultprice = product.getDefaultPrice();
         this.quantity = product.getQuantity();
-        this.isInStock = product.isInStock();
+        this.isInStock = Boolean.valueOf(product.isInStock());
         this.discount = product.getDiscount();
         this.rating = product.getRating();
     }

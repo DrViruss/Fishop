@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div th:if="${error}"><h3>Validation error</h3></div>
+            <form th:action="@{/payment_TEST}" th:object="${request}" method="post" class="col-md-12">
+                <h2>Enter product details</h2>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                        <input type="hidden" th:field="*{id}" th:value="${request.id}" required class="form-control">
+                        <input type="hidden" th:field="*{price}" th:value="${request.price}" required class="form-control" >
+                    <input type="text" th:value="${request.price}" required class="form-control" id="price" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                        <input type="hidden" th:field="*{email}" th:value="${request.email}" required class="form-control">
+                    <input type="email" th:value="${request.email}" required class="form-control" id="email" aria-describedby="emailHelp" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Order description</label>
+                        <input type="hidden" th:value="${request.productName}" required th:field="*{productName}" class="form-control" >
+                    <input type="text" th:value="${request.productName}" required class="form-control" id="productName" disabled>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,12 +1,26 @@
 package com.example.fishop.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ProductDTO {
+    @NotNull
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String description;
+    @NotBlank
     private String specie;
+    @NotBlank
+    @Min(1)
     private double defaultprice;
+    @NotNull
+    @Min(0)
     private int quantity;
+    @NotNull
+    @Min(0)
     private int discount;
 
     public ProductDTO() {

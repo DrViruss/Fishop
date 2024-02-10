@@ -25,67 +25,16 @@
                 </div>
 
                 <div id="cartitemsbody" class="card rounded-3 mb-4">
-<!--                    <div class="card-body p-4">-->
-<!--                        <div class="row d-flex justify-content-between align-items-center">-->
-<!--                            <div class="col-md-2 col-lg-2 col-xl-2">-->
-<!--                                <img-->
-<!--                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"-->
-<!--                                        class="img-fluid rounded-3" alt="Cotton T-shirt">-->
-<!--                            </div>-->
-<!--                            <div class="col-md-3 col-lg-3 col-xl-3">-->
-<!--                                <p class="lead fw-normal mb-2"></p>-->
-<!--                                <p><span class="text-muted">Specie: </span> <span /> </p>-->
-<!--                            </div>-->
-<!--                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">-->
-<!--                                <button class="btn btn-link px-2"-->
-<!--                                        onclick="-->
-<!--                                        let el = this.parentNode.querySelector('input[type=number]');-->
-<!--                                        el.stepDown();-->
 
-<!--                                        this.parentNode.parentNode.querySelector('span[id=price_mlt]').textContent='x'+el.value;-->
-<!--                                ">-->
-<!--                                    <i class="fas bi-dash-lg"></i>-->
-<!--                                </button>-->
-
-<!--                                <input id="form1" min="1" name="quantity" type="number"-->
-<!--                                       class="form-control form-control-sm" />-->
-
-<!--                                <button class="btn btn-link px-2"-->
-<!--                                        onclick="-->
-<!--                                        let el = this.parentNode.querySelector('input[type=number]');-->
-<!--                                        el.stepUp();-->
-
-<!--                                        this.parentNode.parentNode.querySelector('span[id=price_mlt]').textContent='x'+el.value;-->
-<!--                                ">-->
-<!--                                    <i class="fas bi-plus-lg"></i>-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">-->
-<!--                                <h5 class="mb-0">-->
-<!--                                    <h6>-->
-<!--                                        <span id="price_mlt" class="text-muted" ></span>-->
-<!--                                    </h6>-->
-<!--                                </h5>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash;                            <form action="/user/cart/remove" method="post">&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                <input name="productid" type="hidden" th:value="${item.productid}">&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                <input name="username" type="hidden" th:value="${username}">&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                <input id="hiddenquantity" name="quantity" type="hidden" th:value="${item.quantity}">&ndash;&gt;-->
-
-<!--                            &lt;!&ndash;                                <button class="btn btn-danger col-md-1 col-lg-2 col-xl-2" style="position:absolute;right:3px;"  type="submit">&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                    <i class="fas bi-trash-fill"></i>&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                </button>&ndash;&gt;-->
-<!--                            &lt;!&ndash;                            </form>&ndash;&gt;-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </div>
-
+<!--            <form th:action="@{/api/user/createOrder}" method="post">-->
+<!--                <input type="hidden",  />-->
                 <div class="card">
                     <div class="card-body">
-                        <button type="button" class="btn btn-warning btn-block btn-lg">Proceed to Pay</button>
+                        <button type="button" id="submitPayButton" class="btn btn-warning btn-block btn-lg">Proceed to Pay</button>
                     </div>
                 </div>
+            </form>
 
             </div>
         </div>

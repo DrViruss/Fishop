@@ -12,13 +12,17 @@
     <div class="container-xl px-4 mt-4">
         <div class="mt-0 mb-4">
             <div class="row">
+                <div class="bd-callout bd-callout-warning small" th:if="${param.emailNotValid}">Email not valid.</div>
+                <div class="bd-callout bd-callout-warning small" th:if="${param.usernameNotValid}">Username not valid.</div>
+                <div class="bd-callout bd-callout-warning small" th:if="${param.zipNotValid}">Zip not valid.</div>
+                <div class="bd-callout bd-callout-warning small" th:if="${param.locationNotValid}">Location not valid.</div>
+                <div class="bd-callout bd-callout-warning small" th:if="${param.passwordNotValid}">Password not valid.</div>
                 <div class="col-xl-4">
                     <div class="card mb-4 mb-xl-0">
                         <div class="card-header">Profile</div>
                         <div class="card-body text-center">
                             <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-<!--                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
-                            <a th:href="'/user/cart?user='+${user.email}" class="btn btn-info" type="button">Shipping cart</a>
+                            <a href="/user/cart" class="btn btn-info" type="button">Shipping cart</a>
                         </div>
                     </div>
                 </div>
@@ -31,28 +35,38 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
                                     <input class="form-control" id="inputUsername" name="username" type="text" placeholder="Enter your username" th:value="${user.username}">
+<!--                                    <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</td>-->
+                                    <td th:if="${usernameNotValid}">Username Error</td>
                                 </div>
                                 <div class="row gx-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputZipcode">ZipCode</label>
-                                        <input type="number" style="text-align:center;" id="inputZipcode"  name="zip" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="Zip code" th:value="${user.zip}" required="">
+                                        <input type="text" style="text-align:center;" id="inputZipcode"  name="zip" class="form-control" autocomplete="off" minlength="10" maxlength="10" title="Zip code" th:value="${user.zip}" required="">
+<!--                                        <td th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">Zip Error</td>-->
+                                        <td th:if="${zipNotValid}">Zip Error</td>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Location</label>
                                         <input class="form-control" id="inputLocation"  name="location" type="text" placeholder="Enter your location" th:value="${user.country} + ', '+ ${user.state}">
+                                        <td th:if="${locationNotValid}">Location Error</td>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                    <input class="form-control" id="inputEmailAddress"  name="email" type="email" placeholder="Enter your email address"  th:value="${user.email}" disabled>
+                                    <input class="form-control" id="inputEmailAddress" disabled="disabled" type="email" placeholder="Enter your email address"  th:value="${user.email}">
+
+                                    <input type="hidden" name="email" th:value="${user.email}" />
 
                                     <label class="small mb-1" sec:authorize="hasAuthority('ADMIN')" th:if="${user.email != #authentication.principal.username}" for="inputEmailAddress_admin">Email address</label>
-                                    <input class="form-control" sec:authorize="hasAuthority('ADMIN')" th:if="${user.email != #authentication.principal.username}"  id="inputEmailAddress_admin"  name="email" type="email" placeholder="Enter your email address"  th:value="${user.email}">
+                                    <input class="form-control" sec:authorize="hasAuthority('ADMIN')" th:if="${user.email != #authentication.principal.username}"  id="inputEmailAddress_admin" type="email" placeholder="Enter your email address"  th:value="${user.email}">
+<!--                                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Zip Error</td>-->
+                                    <td th:if="${emailNotValid}">Email Error</td>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="small mb-1" for="inputPassword">Password</label>
                                     <input class="form-control" id="inputPassword"  name="password" type="password" placeholder="Password">
+                                    <td th:if="${passwordNotValid}">Password Error</td>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Save changes</button>
                             </form>
