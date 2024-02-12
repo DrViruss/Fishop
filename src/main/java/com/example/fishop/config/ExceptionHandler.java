@@ -16,7 +16,6 @@ public class ExceptionHandler {
 
         model.addAttribute("request",req.getRequestURL());
         model.addAttribute("method",req.getMethod());
-//        model.addAttribute("error",e);
-        return "error";
+        return "error?ex";
     }
 }

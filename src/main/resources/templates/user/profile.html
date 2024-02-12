@@ -35,14 +35,12 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
                                     <input class="form-control" id="inputUsername" name="username" type="text" placeholder="Enter your username" th:value="${user.username}">
-<!--                                    <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</td>-->
                                     <td th:if="${usernameNotValid}">Username Error</td>
                                 </div>
                                 <div class="row gx-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputZipcode">ZipCode</label>
                                         <input type="text" style="text-align:center;" id="inputZipcode"  name="zip" class="form-control" autocomplete="off" minlength="10" maxlength="10" title="Zip code" th:value="${user.zip}" required="">
-<!--                                        <td th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">Zip Error</td>-->
                                         <td th:if="${zipNotValid}">Zip Error</td>
                                     </div>
                                     <div class="col-md-6">
@@ -59,13 +57,12 @@
 
                                     <label class="small mb-1" sec:authorize="hasAuthority('ADMIN')" th:if="${user.email != #authentication.principal.username}" for="inputEmailAddress_admin">Email address</label>
                                     <input class="form-control" sec:authorize="hasAuthority('ADMIN')" th:if="${user.email != #authentication.principal.username}"  id="inputEmailAddress_admin" type="email" placeholder="Enter your email address"  th:value="${user.email}">
-<!--                                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Zip Error</td>-->
                                     <td th:if="${emailNotValid}">Email Error</td>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="small mb-1" for="inputPassword">Password</label>
-                                    <input class="form-control" id="inputPassword"  name="password" type="password" placeholder="Password">
+                                    <input class="form-control" maxlength="24" id="inputPassword"  name="password" type="password" placeholder="Password">
                                     <td th:if="${passwordNotValid}">Password Error</td>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Save changes</button>

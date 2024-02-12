@@ -1,8 +1,6 @@
-package com.example.fishop.services;
+package com.example.fishop.service;
 
 import com.example.fishop.entity.Order;
-import com.example.fishop.entity.Product;
-import com.example.fishop.entity.embended.OrderedProduct;
 import com.example.fishop.repo.OrderRepo;
 import com.example.fishop.repo.ProductRepo;
 import org.springframework.stereotype.Service;

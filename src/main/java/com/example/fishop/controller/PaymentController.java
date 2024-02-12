@@ -5,9 +5,13 @@ import com.example.fishop.entity.Order;
 import com.example.fishop.entity.Product;
 import com.example.fishop.entity.embended.OrderedProduct;
 import com.example.fishop.enums.OrderStatusEnum;
-import com.example.fishop.services.OrderService;
-import com.example.fishop.services.ProductService;
+import com.example.fishop.service.EmailService;
+import com.example.fishop.service.OrderService;
+import com.example.fishop.service.ProductService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,17 +27,23 @@ import java.util.Objects;
 @Controller
 public class PaymentController {
 
+    Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
     @Autowired
     OrderService orderService;
 
     @Autowired
     ProductService productService;
 
+    @Autowired
+    EmailService emailService;
+
     @Value("${stripe.api.publicKey}")
     private String publicKey;
     @GetMapping("/payment_TEST")
     public String home(@RequestParam Long id,@RequestParam String email, Model model){
         Order o = orderService.get(id);
+        if(o == null) return "redirect:/user/cart";
         model.addAttribute("request", new PaymentDTO(id,o.getPrice(),email,"Order #"+id));
         return "payment/index";
     }
@@ -42,7 +52,7 @@ public class PaymentController {
     public String checkout(@ModelAttribute @Valid PaymentDTO paymentDTO,
                            BindingResult bindingResult,
                            Model model){
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors() || orderService.get(paymentDTO.getId()) == null){
             return "redirect:/payment_TEST?error";
         }
         model.addAttribute("publicKey", publicKey);
@@ -65,6 +75,16 @@ public class PaymentController {
         {
             o.setStatus(OrderStatusEnum.CANCELLED);
             orderService.save(o);
+            try {
+                emailService.sendHtmlEmail(
+                        "New order status",
+                        "<p>Your order #"+o.getId()+" now has new status: "+OrderStatusEnum.CANCELLED+"</p>",
+                        o.getCustomer().getUsername(),
+                        o.getCustomer().getEmail()
+                );
+            } catch (MessagingException e) {
+                logger.error("Error on messaging to"+o.getCustomer().getEmail()+"\nError info:"+e.getMessage());
+            }
         }
         else
         {
@@ -76,6 +96,18 @@ public class PaymentController {
                 p.setQuantity(p.getQuantity()-product.getQuantity());
                 productService.save(p);
             }
+
+            try {
+                emailService.sendHtmlEmail(
+                    "New order status",
+                    "<p>Your order #"+o.getId()+" now has new status: "+OrderStatusEnum.SHIPPING+"</p>",
+                    o.getCustomer().getUsername(),
+                    o.getCustomer().getEmail()
+                );
+            } catch (MessagingException e) {
+                logger.error("Error on messaging to"+o.getCustomer().getEmail()+"\nError info:"+e.getMessage());
+            }
+
         }
         return "redirect:/user/order?id="+o.getId();
     }

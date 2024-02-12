@@ -1,22 +1,12 @@
 package com.example.fishop.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
@@ -29,8 +19,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/","all","/register","/about","/all/*","/logout","/all/search","/404","/api/user/add").permitAll()
-            .requestMatchers("/adminpanel","/adminpanel/*","/all/*/edit").hasAuthority("ADMIN")
+            .requestMatchers("/register","/login","/api/user/add").anonymous()
+            .requestMatchers("/","/all","/about","/all/*","/all/search").permitAll()
+
+            .requestMatchers("/adminpanel","/adminpanel/products/new","/adminpanel/*","/all/*/edit","/api/all/*").hasAuthority("ADMIN")
 
             .anyRequest().authenticated()
         )
@@ -40,7 +32,6 @@ public class WebSecurityConfig {
             .permitAll()
         )
         .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout").permitAll().logoutSuccessUrl("/login"));
-//        http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

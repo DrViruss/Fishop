@@ -1,4 +1,4 @@
-package com.example.fishop.services;
+package com.example.fishop.service;
 
 import com.example.fishop.dto.response.ResponseProductDTO;
 import com.example.fishop.entity.Product;
@@ -20,12 +20,6 @@ public class ProductService {
         this.repo = repo;
         if(repo.count() > 0)
             maxPrice = getDBPrice();
-    }
-
-    public Long isPresent(Product product){
-        Product product1 = get(product.getId());
-        if(product1 == null) return null;
-        return product1.getId();
     }
 
     public Product get(Long id) {
@@ -78,10 +72,22 @@ public class ProductService {
 
     public void remove(Long id) {
         Product product = get(id);
+        if(product == null) return;
         repo.delete(product);
 
         if(product.getPrice() >= (this.maxPrice-1)) this.maxPrice = getDBPrice();
 
+    }
+
+    public List<ResponseProductDTO> getBest()
+    {
+        List<ResponseProductDTO> result = new ArrayList<>();
+        Iterable<Product> prods = repo.getWithHighestRating();
+        prods.forEach(product -> {
+            result.add(new ResponseProductDTO(product));
+        });
+
+        return result;
     }
 
     private int getDBPrice() {

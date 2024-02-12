@@ -2,11 +2,10 @@ package com.example.fishop.controller;
 
 import com.example.fishop.dto.ProductDTO;
 import com.example.fishop.dto.response.ResponseProductDTO;
-import com.example.fishop.dto.response.ResponseSpecieDTO;
 import com.example.fishop.entity.Product;
 import com.example.fishop.entity.ProductSpecie;
-import com.example.fishop.services.ProductService;
-import com.example.fishop.services.ProductSpecieService;
+import com.example.fishop.service.ProductService;
+import com.example.fishop.service.ProductSpecieService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -30,7 +29,6 @@ public class ProductViewController {
     @GetMapping("/all")
     public String all(Model model) {
         List<ResponseProductDTO> products = productService.get();
-
         model.addAttribute("text","");
         model.addAttribute("speciename","");
         model.addAttribute("sliderprice_minimum",0);
@@ -66,8 +64,10 @@ public class ProductViewController {
 
 
     @GetMapping(value = "/all/{productId}")
-    public String getProductDetails(@PathVariable Long productId, Model model) {
-        model.addAttribute("product",new ResponseProductDTO(productService.get(productId)));
+    public String getProductDetails(@PathVariable Long productId ,Model model) {
+        Product p = productService.get(productId);
+        if(p == null) return "redirect:/";
+        model.addAttribute("product",new ResponseProductDTO(p));
         return "product";
     }
 
@@ -81,11 +81,18 @@ public class ProductViewController {
     @PostMapping(value = "/api/all/remove")
     public String remove(Long productId) {
         productService.remove(productId);
-        return redirectToAll();
+        return "redirect:/all";
+    }
+
+    @GetMapping(value = "/")
+    public String home(Model model)
+    {
+        model.addAttribute("products",productService.getBest());
+        return "home";
     }
 
     @PostMapping(value="/api/all/editProduct", consumes = {"application/x-www-form-urlencoded"})
-    public String editProduct(ProductDTO productDTO) {
+    public String editProduct(@Valid ProductDTO productDTO) {
         Product product = productService.get(productDTO.getId());
         ProductSpecie specie = specieService.getByName(productDTO.getSpecie());
         if(specie == null)
@@ -103,10 +110,10 @@ public class ProductViewController {
         product.UpdateData();
         product = productService.save(product);
 
-        return redirectToProduct(product.getId());
+        return "redirect:/all/"+product.getId();
     }
     @PostMapping(value="/api/all/addProduct", consumes = {"application/x-www-form-urlencoded"})
-    public String addProduct(ProductDTO productDTO) {
+    public String addProduct(@Valid ProductDTO productDTO) {
         ProductSpecie specie = specieService.getByName(productDTO.getSpecie());
         if(specie == null)
         {
@@ -126,22 +133,8 @@ public class ProductViewController {
         specie.setProducts(products);
         specieService.save(specie);
 
-        return redirectToProduct(product.getId());
+        return "redirect:/all/"+product.getId();
     }
 
-    private String redirectToProduct(Long id)
-    {
-        return redirectToAll()+"/"+id;
-    }
-
-    private String redirectToAll()
-    {
-        return redirectTo("all");
-    }
-
-    private String redirectTo(String to)
-    {
-        return "redirect:/"+to;
-    }
 
 }

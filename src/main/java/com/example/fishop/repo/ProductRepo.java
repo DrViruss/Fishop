@@ -1,8 +1,6 @@
 package com.example.fishop.repo;
 
 import com.example.fishop.entity.Product;
-import com.example.fishop.entity.User;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -23,4 +21,7 @@ public interface ProductRepo extends CrudRepository<Product,Long> {
 
     @Query("SELECT p FROM Product p ORDER BY p.price DESC LIMIT 1")
     public Product getWithHighestPrice();
+
+    @Query("SELECT p FROM Product p ORDER BY p.rating DESC LIMIT 10")
+    public Iterable<Product> getWithHighestRating();
 }

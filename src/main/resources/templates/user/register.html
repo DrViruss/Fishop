@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <title>Register</title>
@@ -34,7 +34,7 @@
     }
 
 
-    if (!(/^[0-9]{5}(?:-[0-9]{4})$/.test($("#floatingZipInput")[0].value)))
+    if (!(/^\d{5}(?:[-\s]\d{4})?$/.test($("#floatingZipInput")[0].value)))
     {
         event.preventDefault();
         alert("Zip not valid. Example: 12345-1234")

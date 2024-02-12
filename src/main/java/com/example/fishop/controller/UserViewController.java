@@ -11,14 +11,15 @@ import com.example.fishop.entity.Product;
 import com.example.fishop.entity.User;
 import com.example.fishop.entity.embended.OrderedProduct;
 import com.example.fishop.enums.UserRoleEnum;
-import com.example.fishop.services.OrderService;
-import com.example.fishop.services.ProductService;
-import com.example.fishop.services.UserService;
-import com.example.fishop.utils.DBUtils;
+import com.example.fishop.service.OrderService;
+import com.example.fishop.service.ProductService;
+import com.example.fishop.service.UserService;
+import com.example.fishop.util.DBUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,8 @@ import java.util.Objects;
 @Controller
 public class UserViewController {
 
+    Logger logger = LoggerFactory.getLogger(UserViewController.class);
+
     @Autowired
     UserService userService;
 
@@ -47,17 +50,17 @@ public class UserViewController {
 
     @PostMapping(value = "/api/user/update", consumes = {"application/x-www-form-urlencoded"})
     public String update(@Valid UserDTO userDTO, BindingResult bindingResult) {
-        User user = userService.getByEmail(userDTO.getEmail());
-        if(user == null) return "redirect:/logout";
-        User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!Objects.equals(sender.getEmail(), userDTO.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN) return "redirect:/";
-
         if(bindingResult.hasErrors())
         {
             if(bindingResult.hasFieldErrors("email")) return "redirect:/user?emailNotValid";
             if(bindingResult.hasFieldErrors("username")) return "redirect:/user?usernameNotValid";
             if (bindingResult.hasFieldErrors("zip")) return "redirect:/user?zipNotValid";
         }
+
+        User user = userService.getByEmail(userDTO.getEmail());
+        User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(user == null || ( !Objects.equals(sender.getEmail(), userDTO.getEmail()) && sender.getRole() != UserRoleEnum.ADMIN )) return "redirect:/";
+
 
         if(!DBUtils.validateLocation(userDTO.getLocation())) return "redirect:/user?locationNotValid";
 
@@ -69,6 +72,8 @@ public class UserViewController {
             else
                 return "redirect:/user?passwordNotValid";
         }
+
+        logger.debug(sender.getEmail()+" with role: "+ sender.getRole()+" trying to update "+user.getEmail()+"'s information!");
 
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
@@ -96,16 +101,16 @@ public class UserViewController {
         if(!DBUtils.validateCountry(userDTO.getCountry()) || !DBUtils.validateState(userDTO.getState()))
             return "redirect:/register?locationNotValid";
 
+        user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getEmail());
+
         String pass = userDTO.getPassword();
-        if(!pass.isBlank())
+        if(pass.isBlank() || !DBUtils.validatePassword(pass))
         {
-            if(DBUtils.validatePassword(pass))
-                user.setPassword(userDTO.getPassword());
-            else
                 return "redirect:/register?passwordNotValid";
         }
 
-        user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getEmail());
+        logger.debug("Anonymous user tries to register with email: "+userDTO.getEmail());
+
         user.setZip(userDTO.getZip());
         user.setRole(UserRoleEnum.USER);
         user.setCountry(userDTO.getCountry());
@@ -114,6 +119,7 @@ public class UserViewController {
         userService.save(user);
         return "redirect:/login";
     }
+
 
     @GetMapping("/user/{username}")
     public String userById(
@@ -135,6 +141,7 @@ public class UserViewController {
 
         ResponseUserDTO response = new ResponseUserDTO(sender);
         model.addAttribute("user",response);
+
         return "user/profile";
     }
 
@@ -160,8 +167,11 @@ public class UserViewController {
 
     @PostMapping(value = "/api/user/createOrder")
     public ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
+        User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(!Objects.equals(sender.getEmail(), orderDTO.getUsername())) return ResponseEntity.status(403).build();
         List<OrderedProduct> orderItems = new ArrayList<>();
         Order order = null;
+
         for(OrderItemDTO dto : orderDTO.getItems())
         {
             Product product = productService.get(dto.getId());
@@ -177,6 +187,8 @@ public class UserViewController {
             order = orderService.save(order);
             user.addOrder(order);
             userService.save(user);
+
+            logger.debug("New order #"+order.getId()+" was created by: "+user.getEmail());
         }
 
         if(order!= null) return ResponseEntity.ok(order.getId());
@@ -187,6 +199,7 @@ public class UserViewController {
     @GetMapping(value = "/user/order")
     public String orders(@RequestParam(name = "id") Long id,Model model) {
         Order order = orderService.get(id);
+        if(order == null) return "redirect:/";
         User user = order.getCustomer();
         if(user == null) return "redirect:/logout";
         User sender = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());

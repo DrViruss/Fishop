@@ -1,4 +1,4 @@
-package com.example.fishop.utils;
+package com.example.fishop.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

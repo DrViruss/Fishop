@@ -1,4 +1,4 @@
-package com.example.fishop.services;
+package com.example.fishop.service;
 
 import com.example.fishop.dto.response.ResponseSpecieDTO;
 import com.example.fishop.entity.ProductSpecie;

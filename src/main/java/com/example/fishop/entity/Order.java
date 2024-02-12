@@ -2,7 +2,7 @@ package com.example.fishop.entity;
 
 import com.example.fishop.entity.embended.OrderedProduct;
 import com.example.fishop.enums.OrderStatusEnum;
-import com.example.fishop.utils.DBUtils;
+import com.example.fishop.util.DBUtils;
 import jakarta.persistence.*;
 
 import java.util.List;

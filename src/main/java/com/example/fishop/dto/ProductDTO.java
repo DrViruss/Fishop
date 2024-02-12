@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ProductDTO {
-    @NotNull
     private Long id;
     @NotBlank
     private String name;
@@ -13,7 +12,7 @@ public class ProductDTO {
     private String description;
     @NotBlank
     private String specie;
-    @NotBlank
+    @NotNull
     @Min(1)
     private double defaultprice;
     @NotNull

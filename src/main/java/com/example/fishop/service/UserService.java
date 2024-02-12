@@ -1,4 +1,4 @@
-package com.example.fishop.services;
+package com.example.fishop.service;
 
 import com.example.fishop.entity.User;
 import com.example.fishop.repo.UserRepo;

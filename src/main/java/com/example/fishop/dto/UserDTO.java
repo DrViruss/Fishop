@@ -1,8 +1,12 @@
 package com.example.fishop.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class UserDTO {
+    @NotBlank
     @Email
     private String email;
     @NotBlank
@@ -10,6 +14,8 @@ public class UserDTO {
     private String username;
     private String password;
     @NotBlank
+    @Size(min=5,max = 10)
+    @Pattern(regexp = "^\\d{5}(?:[-\\s]\\d{4})?$")
     private String zip;
     private String country;
     private String location;
