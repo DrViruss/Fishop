@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.fishop.config.WebSecurityConfig.encoder;
+
 @Controller
 public class UserViewController {
 
@@ -101,7 +103,7 @@ public class UserViewController {
         if(!DBUtils.validateCountry(userDTO.getCountry()) || !DBUtils.validateState(userDTO.getState()))
             return "redirect:/register?locationNotValid";
 
-        user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getEmail());
+        user = new User(userDTO.getUsername(),encoder.encode(userDTO.getPassword()),userDTO.getEmail());
 
         String pass = userDTO.getPassword();
         if(pass.isBlank() || !DBUtils.validatePassword(pass))
