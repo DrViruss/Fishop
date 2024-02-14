@@ -21,7 +21,7 @@ spring.mail.properties.mail.smtp.auth=false
 3. Run
 ```./gradle bootRun```
 
-# How to test email (in case of example smtp server using)
+## How to test email (in case of example smtp server using)
 1. Go to [link](https://www.wpoven.com/tools/free-smtp-server-for-testing)
 2. input your email
 3. profit
